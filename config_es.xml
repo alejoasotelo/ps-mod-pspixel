@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>pspixel</name>
+    <displayName><![CDATA[El p&iacute;xel de Facebook oficial]]></displayName>
+    <version><![CDATA[1.1.2]]></version>
+    <description><![CDATA[Con este m&oacute;dulo, podr&aacute;s implementar una herramienta de an&aacute;lisis en las p&aacute;ginas de tu sitio web y seguir eventos.]]></description>
+    <author><![CDATA[Prestashop]]></author>
+    <tab><![CDATA[analytics_stats]]></tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+	<limited_countries></limited_countries>
+</module>
