@@ -44,7 +44,7 @@ class Pspixel extends Module
         $this->bootstrap = true;
 
         $this->ps_versions_compliancy = array(
-            'min' => '1.7.1.0',
+            'min' => '1.6.0.0',
             'max' => _PS_VERSION_,
         );
 
@@ -151,11 +151,7 @@ class Pspixel extends Module
         }
 
         // Asset Manager
-        $this->context->controller->registerJavascript(
-            'pspixel_frontjs',
-            $this->js_path.'printpixel.js',
-            array('position' => 'bottom', 'priority' => 150)
-        );
+        $this->context->controller->addJS($this->js_path.'printpixel.js');
     }
 
     // Handle Payment module (AddPaymentInfo)
@@ -167,7 +163,7 @@ class Pspixel extends Module
       }
 
       $items_id = array();
-      $items = $params['cart']->getProducts();
+      $items = $this->context->cart->getProducts();
       foreach ($items as &$item) {
           $items_id[] = (int)$item['id_product'];
       }
@@ -175,11 +171,11 @@ class Pspixel extends Module
 
       $iso_code = pSQL($this->context->currency->iso_code);
       $content = array(
-        'value' => Tools::ps_round($params['cart']->getOrderTotal(), 2),
+        'value' => Tools::ps_round($this->context->cart->getOrderTotal(), 2),
         'currency' => $iso_code,
         'content_type' => 'product',
         'content_ids' => $items_id,
-        'num_items' => $params['cart']->nbProducts(),
+        'num_items' => $this->context->cart->nbProducts(),
       );
 
       $content = $this->formatPixel($content);
@@ -201,11 +197,7 @@ class Pspixel extends Module
         }
 
         // Asset Manager to be sure the JS is loaded
-        $this->context->controller->registerJavascript(
-            'front_common',
-            $this->js_path.'printpixel.js',
-            array('position' => 'bottom', 'priority' => 150)
-        );
+        $this->context->controller->addJS($this->js_path.'printpixel.js');
 
         $type = '';
         $content = array();
@@ -230,17 +222,17 @@ class Pspixel extends Module
         */
         if ($page === 'product') {
             $type = 'ViewContent';
-            $prods = $this->context->controller->getTemplateVarProduct();
+            $product = $this->context->controller->getProduct();
 
-            if (count($prods['attributes']) > 0) {
+            /*if ($product->hasAttributes() > 0) {
                 $content_type = 'product_group';
-            }
+            }*/
 
             $content = array(
-              'content_name' => Tools::replaceAccentedChars($prods['name']) .' ('.$locale.')',
-              'content_ids' => array($prods['id_product']),
+              'content_name' => Tools::replaceAccentedChars($product->name) .' ('.$locale.')',
+              'content_ids' => array($product->id),
               'content_type' => $content_type,
-              'value' => (float)$prods['price_amount'],
+              'value' => (float)$product->price,
               'currency' => $iso_code,
             );
         }
@@ -251,8 +243,9 @@ class Pspixel extends Module
             $type = 'ViewCategory';
             $category = $this->context->controller->getCategory();
 
-            $breadcrumbs = $this->context->controller->getBreadcrumbLinks();
-            $breadcrumb = implode(' > ', array_column($breadcrumbs['links'], 'title'));
+            //$breadcrumbs = $this->context->controller->getBreadcrumbLinks();
+            //$breadcrumb = implode(' > ', array_column($breadcrumbs['links'], 'title'));
+            $breadcrumb = '';
 
             $prods = $category->getProducts($id_lang, 1, 10);
             $track = 'trackCustom';
@@ -282,8 +275,9 @@ class Pspixel extends Module
             $type = 'ViewCMS';
             $cms = new Cms((int)Tools::getValue('id_cms'), $id_lang);
 
-            $breadcrumbs = $this->context->controller->getBreadcrumbLinks();
-            $breadcrumb = implode(' > ', array_column($breadcrumbs['links'], 'title'));
+            //$breadcrumbs = $this->context->controller->getBreadcrumbLinks();
+            //$breadcrumb = implode(' > ', array_column($breadcrumbs['links'], 'title'));
+            $breadcrumb = '';
             $track = 'trackCustom';
 
             $content = array(
@@ -303,7 +297,7 @@ class Pspixel extends Module
         /**
         * Triggers InitiateCheckout for checkout page
         */
-        elseif ($page === 'cart') {
+        elseif ($page === 'cart' || ($page === 'order' && $this->context->controller->step === 0)) {
             $type = 'InitiateCheckout';
 
             $content = array(
@@ -377,7 +371,7 @@ class Pspixel extends Module
             return;
         }
 
-        $order = $params['order'];
+        $order = isset($params['objOrder']) ? $params['objOrder'] : $params['order'];
 
         $num_items = 0;
         $items_id = array();
@@ -395,7 +389,7 @@ class Pspixel extends Module
           'currency' => $iso_code,
           'content_type' => 'product',
           'content_ids' => $items_id,
-          'order_id' => $params['order']->id,
+          'order_id' => $order->id,
           'num_items' => $num_items,
         );
 

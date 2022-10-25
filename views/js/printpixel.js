@@ -47,36 +47,46 @@ $(document).ready(function() {
    });
   }
 
-  // Track Add to cart
-  prestashop.on('updateCart', function(params) {
+  if (typeof prestashop === 'undefined') {
 
-    if (
-      typeof(params) !== 'undefined'
-      && typeof(prestashop.cart) !== 'undefined'
-    ) {
-      var iso_code = prestashop.currency.iso_code,
-      products = prestashop.cart.products,
-      my_id = params.reason.idProduct,
-      my_attribute = params.reason.idProductAttribute,
-      my_link = params.reason.linkAction;
-
-      if (my_link != 'delete-from-cart') {
-
-        // Keep ajax call
-        // ajaxGetProduct(my_id, my_attribute);
-
-        // Find product
-        var search_product = $.grep(products, function(e){
-          return e.id_product == my_id && e.id_product_attribute == my_attribute;
-        });
-
-        if (products.length != 0) {
-          var amount = search_product[0].price_wt;
-          fbq('track', 'AddToCart', { value: amount, currency: iso_code, content_ids: my_id, content_type: "product" });
-        }
-
-      }
+    window.onAddToCart = function(id_product, amount) {
+      fbq('track', 'AddToCart', { value: amount, currency: 'ARS', content_ids: id_product, content_type: "product" });
     }
-  });
+
+  } else {
+
+    // Track Add to cart
+    prestashop.on('updateCart', function(params) {
+  
+      if (
+        typeof(params) !== 'undefined'
+        && typeof(prestashop.cart) !== 'undefined'
+      ) {
+        var iso_code = prestashop.currency.iso_code,
+        products = prestashop.cart.products,
+        my_id = params.reason.idProduct,
+        my_attribute = params.reason.idProductAttribute,
+        my_link = params.reason.linkAction;
+  
+        if (my_link != 'delete-from-cart') {
+  
+          // Keep ajax call
+          // ajaxGetProduct(my_id, my_attribute);
+  
+          // Find product
+          var search_product = $.grep(products, function(e){
+            return e.id_product == my_id && e.id_product_attribute == my_attribute;
+          });
+  
+          if (products.length != 0) {
+            var amount = search_product[0].price_wt;
+            fbq('track', 'AddToCart', { value: amount, currency: iso_code, content_ids: my_id, content_type: "product" });
+          }
+  
+        }
+      }
+    });
+    
+  }
 
 });
