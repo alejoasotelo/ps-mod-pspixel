@@ -1,6 +1,7 @@
 <?php
+
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{pspixel}prestashop>pspixel_91b67154d797c5b977155f4496a61169'] = 'Official Facebook Pixel';
 $_MODULE['<{pspixel}prestashop>pspixel_f582921a48fca1fb00cb7ba05fc731cf'] = 'Ten moduł umożliwia wdrożenie narzędzia do analizy na stronach witryny oraz śledzenie zdarzeń';
 $_MODULE['<{pspixel}prestashop>pspixel_ec4e9c84def39e2a1a6a2507a11e65db'] = 'Pixel ID nie może być pusty';

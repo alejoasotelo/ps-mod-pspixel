@@ -18,7 +18,6 @@ use PrestaShop\PrestaShop\Adapter\ObjectPresenter;
 
 class PsPixelFrontAjaxPixelModuleFrontcontroller extends ModuleFrontController
 {
-
     //Redirect to home if trying to access to the front controller without ajax call
     public function initContent()
     {
@@ -35,9 +34,9 @@ class PsPixelFrontAjaxPixelModuleFrontcontroller extends ModuleFrontController
         if (empty(Configuration::get('PS_PIXEL_ID'))) {
             return;
         }
-        $id_lang = (int)$this->context->language->id;
-        $id_product = (int)Tools::getValue('id_product');
-        $id_attribute = (int)Tools::getValue('id_attribute');
+        $id_lang = (int) $this->context->language->id;
+        $id_product = (int) Tools::getValue('id_product');
+        $id_attribute = (int) Tools::getValue('id_attribute');
 
         $objectPresenter = new ObjectPresenter();
 
@@ -59,6 +58,6 @@ class PsPixelFrontAjaxPixelModuleFrontcontroller extends ModuleFrontController
             $this->context->language
         );
 
-        die(Tools::jsonEncode($pixelProduct));
+        exit(Tools::jsonEncode($pixelProduct));
     }
 }

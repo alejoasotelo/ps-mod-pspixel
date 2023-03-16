@@ -13,8 +13,7 @@
 * @license   http://addons.prestashop.com/en/content/12-terms-and-conditions-of-use
 * International Registered Trademark & Property of PrestaShop SA
 */
-
-include_once(dirname(__FILE__).'/../../../config/config.inc.php');
+include_once dirname(__FILE__) . '/../../../config/config.inc.php';
 
 class APIFAQ
 {
@@ -22,13 +21,13 @@ class APIFAQ
     {
         $context = Context::getContext();
         $iso_code = Language::getIsoById($context->language->id);
-        $url = 'http://api.addons.prestashop.com/request/faq/'.$m->module_key.'/'.$m->version.'/'.$iso_code;
+        $url = 'http://api.addons.prestashop.com/request/faq/' . $m->module_key . '/' . $m->version . '/' . $iso_code;
 
-        $options = array(
-            CURLOPT_URL            => $url,
+        $options = [
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false
-        );
+            CURLOPT_HEADER => false,
+        ];
 
         $CURL = curl_init();
         curl_setopt_array($CURL, $options);

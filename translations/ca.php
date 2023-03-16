@@ -1,6 +1,7 @@
 <?php
+
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{pspixel}prestashop>pspixel_91b67154d797c5b977155f4496a61169'] = 'Facebook Pixel Officiel';
 $_MODULE['<{pspixel}prestashop>pspixel_f582921a48fca1fb00cb7ba05fc731cf'] = 'Ce module vous permet de mettre en place un outil d\'analyse sur vos sites web et de suivre les différents événements';
 $_MODULE['<{pspixel}prestashop>pspixel_ec4e9c84def39e2a1a6a2507a11e65db'] = 'Votre ID Pixel ne peut pas être vide';
@@ -51,7 +52,7 @@ $_MODULE['<{pspixel}prestashop>documentation_91dd73dcc51182410b2533f548926fa6'] 
 $_MODULE['<{pspixel}prestashop>documentation_8a2b846b44e12930dbf6ef37d3b63590'] = 'Besoin d\'aide ? Veuillez cliquer sur ';
 $_MODULE['<{pspixel}prestashop>contact_a3fa607b49ad809e8ca8f58abe958102'] = 'Merci d\'avoir choisi un module développé par l\'équipe Addons de PrestaShop.';
 $_MODULE['<{pspixel}prestashop>contact_9886df5ae168c20c3926e7e9f41adb45'] = 'Si vous rencontrez un problème avec le module, notre équipe se tient à votre disposition via le';
-$_MODULE['<{pspixel}prestashop>contact_7b3c61e9446620d8aa80f473a661254f'] = 'Pour vous faire gagner du temps, avant de nous contacter :';
+$_MODULE['<{pspixel}prestashop>contact_7b3c61e9446620d8aa80f473a661254f'] = 'Pour vous faire gagner du temps, avant de nous contacter :';
 $_MODULE['<{pspixel}prestashop>contact_47fad5151819f320629572659a9bb648'] = 'assurez-vous de bien avoir lu la documentation.';
 $_MODULE['<{pspixel}prestashop>contact_da771cda19f288952ad7816d268d2753'] = 'en cas de prise de contact via le formulaire, n\'hésitez pas à nous transmettre votre premier message, un maximum de détails sur le problème et son origine (captures d\'écran, actions répétées pour trouver le bug, etc.).';
 $_MODULE['<{pspixel}prestashop>contact_1b9441f293cd7307b59296f616bb858a'] = 'Ce module a été développé par PrestaShop et peut uniquement être vendu sur';

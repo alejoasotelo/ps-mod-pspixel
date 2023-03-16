@@ -24,7 +24,6 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -32,13 +31,12 @@ if (!defined('_PS_VERSION_')) {
 require_once __DIR__ . '/vendor/autoload.php';
 
 use FacebookAds\Api;
-use FacebookAds\Object\ServerSide\CustomData;
+use FacebookAds\Http\Exception\RequestException;
 use FacebookAds\Object\ServerSide\ActionSource;
+use FacebookAds\Object\ServerSide\CustomData;
 use FacebookAds\Object\ServerSide\Event;
-use FacebookAds\Object\ServerSide\EventRequest;
 use FacebookAds\Object\ServerSide\EventRequestAsync;
 use FacebookAds\Object\ServerSide\UserData;
-use FacebookAds\Http\Exception\RequestException;
 
 class Pspixel extends Module
 {
@@ -57,10 +55,10 @@ class Pspixel extends Module
         $this->need_instance = 0;
         $this->bootstrap = true;
 
-        $this->ps_versions_compliancy = array(
+        $this->ps_versions_compliancy = [
             'min' => '1.6.0.0',
             'max' => _PS_VERSION_,
-        );
+        ];
 
         parent::__construct();
 
@@ -71,7 +69,7 @@ class Pspixel extends Module
         $this->front_controller = Context::getContext()->link->getModuleLink(
             $this->name,
             'FrontAjaxPixel',
-            array(),
+            [],
             true
         );
         $this->isPS16 = version_compare(_PS_VERSION_, '1.7.0.0', '<');
@@ -101,14 +99,14 @@ class Pspixel extends Module
 
     private function postProcess()
     {
-        if (((bool)Tools::isSubmit('submitPixel')) === true) {
+        if (((bool) Tools::isSubmit('submitPixel')) === true) {
             $id_pixel = pSQL(trim(Tools::getValue('PS_PIXEL_ID')));
             if (empty($id_pixel)) {
-                return  $this->displayError(
+                return $this->displayError(
                     $this->l('Your ID Pixel can not be empty')
                 );
             } elseif (Tools::strlen($id_pixel) < 15 || Tools::strlen($id_pixel) > 16) {
-                return  $this->displayError(
+                return $this->displayError(
                     $this->l('Your ID Pixel must be 16 characters long')
                 );
             } else {
@@ -130,7 +128,7 @@ class Pspixel extends Module
                 );
             }
 
-            $testEnable = (int)Tools::getValue('PS_PIXEL_TEST_ENABLE');
+            $testEnable = (int) Tools::getValue('PS_PIXEL_TEST_ENABLE');
             Configuration::updateValue('PS_PIXEL_TEST_ENABLE', $testEnable);
             $this->displayConfirmation(
                 $this->l('Your test enable have been updated.')
@@ -153,10 +151,10 @@ class Pspixel extends Module
     public function getContent()
     {
         // Set JS
-        $this->context->controller->addJs(array(
+        $this->context->controller->addJs([
             $this->_path . 'views/js/conf.js',
-            $this->_path . 'views/js/faq.js'
-        ));
+            $this->_path . 'views/js/faq.js',
+        ]);
 
         // Set CSS
         $this->context->controller->addCss(
@@ -165,7 +163,7 @@ class Pspixel extends Module
 
         $is_submit = $this->postProcess();
 
-        include_once('classes/APIFAQClass.php');
+        include_once 'classes/APIFAQClass.php';
         $api = new APIFAQ();
         $api_json = Tools::jsonDecode($api->getData($this));
         $apifaq_json_categories = '';
@@ -173,20 +171,20 @@ class Pspixel extends Module
             $apifaq_json_categories = $api_json->categories;
         }
 
-        $this->context->smarty->assign(array(
-            'is_submit'          => $is_submit,
-            'module_name'        => $this->name,
-            'module_version'     => $this->version,
-            'debug_mode'         => (int) _PS_MODE_DEV_,
-            'module_display'     => $this->displayName,
-            'multishop'          => (int) Shop::isFeatureActive(),
-            'apifaq'             => $apifaq_json_categories,
-            'version'            => _PS_VERSION_,
-            'id_pixel'           => pSQL(Configuration::get('PS_PIXEL_ID')),
-            'access_token'       => pSQL(Configuration::get('PS_PIXEL_ACCESS_TOKEN')),
-            'test_enable'        => Configuration::get('PS_PIXEL_TEST_ENABLE'),
-            'test_code'          => pSQL(Configuration::get('PS_PIXEL_TEST_CODE')),
-        ));
+        $this->context->smarty->assign([
+            'is_submit' => $is_submit,
+            'module_name' => $this->name,
+            'module_version' => $this->version,
+            'debug_mode' => (int) _PS_MODE_DEV_,
+            'module_display' => $this->displayName,
+            'multishop' => (int) Shop::isFeatureActive(),
+            'apifaq' => $apifaq_json_categories,
+            'version' => _PS_VERSION_,
+            'id_pixel' => pSQL(Configuration::get('PS_PIXEL_ID')),
+            'access_token' => pSQL(Configuration::get('PS_PIXEL_ACCESS_TOKEN')),
+            'test_enable' => Configuration::get('PS_PIXEL_TEST_ENABLE'),
+            'test_code' => pSQL(Configuration::get('PS_PIXEL_TEST_CODE')),
+        ]);
 
         return $is_submit . $this->display(__FILE__, 'views/templates/admin/configuration.tpl');
     }
@@ -213,28 +211,28 @@ class Pspixel extends Module
             return;
         }
 
-        $items_id = array();
+        $items_id = [];
         $items = $this->context->cart->getProducts();
         foreach ($items as &$item) {
-            $items_id[] = (int)$item['id_product'];
+            $items_id[] = (int) $item['id_product'];
         }
         unset($items, $item);
 
         $iso_code = pSQL($this->context->currency->iso_code);
-        $content = array(
+        $content = [
             'value' => Tools::ps_round($this->context->cart->getOrderTotal(), 2),
             'currency' => $iso_code,
             'content_type' => 'product',
             'content_ids' => $items_id,
             'num_items' => $this->context->cart->nbProducts(),
-        );
+        ];
 
         $content = $this->formatPixel($content);
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'type' => 'AddPaymentInfo',
             'content' => $content,
-        ));
+        ]);
 
         return $this->display(__FILE__, 'views/templates/hook/displaypixel.tpl');
     }
@@ -251,7 +249,7 @@ class Pspixel extends Module
         $this->context->controller->addJS($this->js_path . 'printpixel.js');
 
         $type = '';
-        $content = array();
+        $content = [];
 
         $page = $this->context->controller->php_self;
         if (empty($page)) {
@@ -259,16 +257,16 @@ class Pspixel extends Module
         }
         $page = pSQL($page);
 
-        // front || modulefront 
+        // front || modulefront
         $controller_type = pSQL($this->context->controller->controller_type);
 
-        $id_lang = (int)$this->context->language->id;
+        $id_lang = (int) $this->context->language->id;
         $locale = pSQL(Tools::strtoupper($this->context->language->iso_code));
         $iso_code = pSQL($this->context->currency->iso_code);
         $content_type = 'product';
 
         $track = 'track';
-        /**
+        /*
          * Triggers ViewContent product pages
          */
         if ($page === 'product') {
@@ -279,15 +277,15 @@ class Pspixel extends Module
                 $content_type = 'product_group';
             }*/
 
-            $content = array(
+            $content = [
                 'content_name' => Tools::replaceAccentedChars($product->name) . ' (' . $locale . ')',
-                'content_ids' => array($product->id),
+                'content_ids' => [$product->id],
                 'content_type' => $content_type,
-                'value' => (float)$product->price,
+                'value' => (float) $product->price,
                 'currency' => $iso_code,
-            );
+            ];
         }
-        /**
+        /*
          * Triggers ViewContent for category pages
          */
         elseif ($page === 'category' && $controller_type === 'front') {
@@ -301,14 +299,14 @@ class Pspixel extends Module
             $prods = $category->getProducts($id_lang, 1, 10);
             $track = 'trackCustom';
 
-            $content = array(
+            $content = [
                 'content_name' => Tools::replaceAccentedChars($category->name) . ' (' . $locale . ')',
                 'content_category' => Tools::replaceAccentedChars($breadcrumb),
                 'content_ids' => array_column($prods, 'id_product'),
                 'content_type' => $content_type,
-            );
+            ];
         }
-        /**
+        /*
          * Triggers ViewContent for custom module
          */
         elseif ($controller_type === 'modulefront') {
@@ -317,49 +315,49 @@ class Pspixel extends Module
             $type = 'View' . $name . Tools::ucfirst($page);
 
             $track = 'trackCustom';
-            $content = array();
+            $content = [];
         }
-        /**
+        /*
          * Triggers ViewContent for cms pages
          */
         elseif ($page === 'cms') {
             $type = 'ViewCMS';
-            $cms = new Cms((int)Tools::getValue('id_cms'), $id_lang);
+            $cms = new Cms((int) Tools::getValue('id_cms'), $id_lang);
 
             //$breadcrumbs = $this->context->controller->getBreadcrumbLinks();
             //$breadcrumb = implode(' > ', array_column($breadcrumbs['links'], 'title'));
             $breadcrumb = '';
             $track = 'trackCustom';
 
-            $content = array(
+            $content = [
                 'content_category' => Tools::replaceAccentedChars($breadcrumb),
                 'content_name' => Tools::replaceAccentedChars($cms->meta_title) . ' (' . $locale . ')',
-            );
+            ];
         }
-        /**
+        /*
          * Triggers Search for result pages
          */
         elseif ($page === 'search') {
             $type = Tools::ucfirst($page);
-            $content = array(
+            $content = [
                 'search_string' => pSQL(Tools::getValue('s')),
-            );
+            ];
         }
-        /**
+        /*
          * Triggers InitiateCheckout for checkout page
          */
         elseif ($page === 'cart' || ($page === 'order' && $this->context->controller->step === 0)) {
             $type = 'InitiateCheckout';
 
-            $content = array(
+            $content = [
                 'num_items' => $this->context->cart->nbProducts(),
                 'content_ids' => array_column($this->context->cart->getProducts(), 'id_product'),
                 'content_type' => $content_type,
-                'value' => (float)$this->context->cart->getOrderTotal(),
+                'value' => (float) $this->context->cart->getOrderTotal(),
                 'currency' => $iso_code,
-            );
+            ];
         }
-        /**
+        /*
          * Triggers InitiateCheckout for checkout page
          */
         elseif ($page === 'order' && $this->context->controller->step === 1 && Validate::isLoadedObject($this->context->customer)
@@ -369,29 +367,29 @@ class Pspixel extends Module
 
             $idCustomer = $this->context->customer->id;
 
-            $content = array(
+            $content = [
                 'content_category' => '',
                 'content_name' => $idCustomer,
-                'external_id' => $idCustomer
-            );
+                'external_id' => $idCustomer,
+            ];
 
-            Configuration::updateValue('PSPIXEL_CUSTOMER_' . $idCustomer . '_REMOTE_ADDR',  $_SERVER['REMOTE_ADDR']);
+            Configuration::updateValue('PSPIXEL_CUSTOMER_' . $idCustomer . '_REMOTE_ADDR', $_SERVER['REMOTE_ADDR']);
             Configuration::updateValue('PSPIXEL_CUSTOMER_' . $idCustomer . '_HTTP_USER_AGENT', $_SERVER['HTTP_USER_AGENT']);
         }
 
         // Format Pixel to display
         $content = $this->formatPixel($content);
 
-        Media::addJsDef(array(
-            'pixel_fc' => $this->front_controller
-        ));
+        Media::addJsDef([
+            'pixel_fc' => $this->front_controller,
+        ]);
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'id_pixel' => pSQL(Configuration::get('PS_PIXEL_ID')),
             'type' => $type,
             'content' => $content,
             'track' => $track,
-        ));
+        ]);
 
         return $this->display(__FILE__, 'views/templates/hook/header.tpl');
     }
@@ -409,19 +407,19 @@ class Pspixel extends Module
         $locale = pSQL(Tools::strtoupper($this->context->language->iso_code));
         $iso_code = pSQL($this->context->currency->iso_code);
 
-        $content = array(
+        $content = [
             'content_name' => Tools::replaceAccentedChars($value->product->name) . ' (' . $locale . ')',
-            'content_ids' => array($value->product->id_product),
+            'content_ids' => [$value->product->id_product],
             'content_type' => 'product',
-            'value' => (float)$value->product->price_amount,
+            'value' => (float) $value->product->price_amount,
             'currency' => $iso_code,
-        );
+        ];
         $content = $this->formatPixel($content);
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'type' => 'ViewContent',
             'content' => $content,
-        ));
+        ]);
 
         $value->quickview_html .= $this->context->smarty->fetch(
             $this->local_path . 'views/templates/hook/displaypixel.tpl'
@@ -430,7 +428,7 @@ class Pspixel extends Module
         // Recode Product Object
         $params['value'] = Tools::jsonEncode($value);
 
-        die($params['value']);
+        exit($params['value']);
     }
 
     // Handle Display confirmation (Purchase)
@@ -444,31 +442,31 @@ class Pspixel extends Module
         $order = isset($params['objOrder']) ? $params['objOrder'] : $params['order'];
 
         $num_items = 0;
-        $items_id = array();
+        $items_id = [];
         $items = $order->getProductsDetail();
         foreach ($items as $item) {
-            $num_items += (int)$item['product_quantity'];
-            $items_id[] = (int)$item['product_id'];
+            $num_items += (int) $item['product_quantity'];
+            $items_id[] = (int) $item['product_id'];
         }
         unset($items, $item);
 
         $iso_code = pSQL($this->context->currency->iso_code);
 
-        $content = array(
+        $content = [
             'value' => Tools::ps_round($order->total_paid, 2),
             'currency' => $iso_code,
             'content_type' => 'product',
             'content_ids' => $items_id,
             'order_id' => $order->id,
             'num_items' => $num_items,
-        );
+        ];
 
         $content = $this->formatPixel($content);
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'type' => 'Purchase',
             'content' => $content,
-        ));
+        ]);
 
         return $this->display(__FILE__, 'views/templates/hook/displaypixel.tpl');
     }
@@ -489,17 +487,17 @@ class Pspixel extends Module
         try {
             $customer = $order->getCustomer();
             $num_items = 0;
-            $items_id = array();
+            $items_id = [];
             $items = $order->getProductsDetail();
             foreach ($items as $item) {
-                $num_items += (int)$item['product_quantity'];
-                $items_id[] = (int)$item['product_id'];
+                $num_items += (int) $item['product_quantity'];
+                $items_id[] = (int) $item['product_id'];
             }
             unset($items, $item);
 
             $iso_code = pSQL($this->context->currency->iso_code);
 
-            Api::init(null, null, $accessToken, false);            
+            Api::init(null, null, $accessToken, false);
 
             $ip = self::getConfig('PSPIXEL_CUSTOMER_' . $customer->id . '_REMOTE_ADDR', false);
             $userAgent = self::getConfig('PSPIXEL_CUSTOMER_' . $customer->id . '_HTTP_USER_AGENT', false);
@@ -536,19 +534,19 @@ class Pspixel extends Module
 
             $async_request = (new EventRequestAsync($pixel_id))->setEvents([$event]);
 
-            $isTestEnable = (int)self::getConfig('PS_PIXEL_TEST_ENABLE', 0);
+            $isTestEnable = (int) self::getConfig('PS_PIXEL_TEST_ENABLE', 0);
             if ($isTestEnable > 0) {
                 $testCode = self::getConfig('PS_PIXEL_TEST_CODE', '');
                 $async_request->setTestEventCode($testCode);
             }
 
-            file_put_contents(__DIR__ . '/logs/pspixel.log', $now . ' - hookActionObjectOrderAddAfter(' . $order->id . ', ' . $customer->email . ', '. $ip .', ' . $userAgent .') -> SEND... ' . PHP_EOL, FILE_APPEND);
+            file_put_contents(__DIR__ . '/logs/pspixel.log', $now . ' - hookActionObjectOrderAddAfter(' . $order->id . ', ' . $customer->email . ', ' . $ip . ', ' . $userAgent . ') -> SEND... ' . PHP_EOL, FILE_APPEND);
             $async_request->execute()->then(function () use ($order, $customer, $now) {
                 file_put_contents(__DIR__ . '/logs/pspixel.log', $now . ' - hookActionObjectOrderAddAfter(' . $order->id . ', ' . $customer->email . ') -> SUCCESS ' . PHP_EOL, FILE_APPEND);
-                
+
                 Configuration::deleteByName('PSPIXEL_CUSTOMER_' . $customer->id . '_REMOTE_ADDR');
                 Configuration::deleteByName('PSPIXEL_CUSTOMER_' . $customer->id . '_HTTP_USER_AGENT');
-                //PrestaShopLogger::addLog('pspixel::hookActionObjectOrderAddAfter(' . $order->id . ', ' . $customer->email . ') SUCCESS', 1, null, 'pspixel', 1, false);
+            //PrestaShopLogger::addLog('pspixel::hookActionObjectOrderAddAfter(' . $order->id . ', ' . $customer->email . ') SUCCESS', 1, null, 'pspixel', 1, false);
             }, function (RequestException $e) use ($now, $order, $customer) {
                 file_put_contents(__DIR__ . '/logs/pspixel.log', $now . ' - hookActionObjectOrderAddAfter(' . $order->id . ', ' . $customer->email . ') -> ERROR - RequestException: ' . $e->getMessage() . PHP_EOL, FILE_APPEND);
                 /*print("Error!!!\n" .
@@ -573,7 +571,7 @@ class Pspixel extends Module
                 } elseif (gettype($val) === 'array') {
                     $format .= $key . ': [\'';
                     foreach ($val as &$id) {
-                        $format .= (int)$id . "', '";
+                        $format .= (int) $id . "', '";
                     }
                     unset($id);
                     $format = Tools::substr($format, 0, -4);
@@ -589,14 +587,15 @@ class Pspixel extends Module
 
             return $format;
         }
+
         return false;
     }
 
     public static function getConfig($key, $defValue = null)
     {
-
         if (version_compare(_PS_VERSION_, '1.7.0.0', '<')) {
             $value = Configuration::get($key);
+
             return $value === false ? $defValue : $value;
         }
 
