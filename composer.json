@@ -2,12 +2,21 @@
     "name": "alejoasotelo/pspixel",
     "authors": [
         {
-            "name": "alejoasotelo",
-            "email": "alesotelo@gmail.com"
+            "name": "Alejo Sotelo",
+            "email": "soporte@alejosotelo.com.ar",
+            "homepage": "https://alejosotelo.com.ar"
         }
     ],
     "require": {
         "php": ">=7.0",
         "facebook/php-business-sdk": "^14.0"
-    }
+    },
+    "require-dev": {
+        "prestashop/php-dev-tools": "3.*",
+        "prestashop/autoindex": "^1.0"
+    },
+    "scripts": {
+        "php-cs-fixer": "vendor\\bin\\php-cs-fixer fix"
+    },
+    "type": "prestashop-module"
 }
