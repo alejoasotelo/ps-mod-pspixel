@@ -16,7 +16,7 @@
         "prestashop/autoindex": "^1.0"
     },
     "scripts": {
-        "php-cs-fixer": "vendor\\bin\\php-cs-fixer fix"
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix"
     },
     "type": "prestashop-module"
 }
