@@ -1,3 +1,6 @@
+1.1.2
+Agregué el envio del evento Purchase cuando se crea el pedido
+
 1.0.6
 Fix for PS 1.7.1.1, the JS is not loaded
 

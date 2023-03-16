@@ -28,3 +28,16 @@ All those events can then be analyzed in your Facebook Ads manager.
 [PlDb]: <https://www.facebook.com/ads/manager/pixel/>
 [PlGh]: <https://www.facebook.com/business/help/651294705016616>
 [PlGd]: <https://developers.facebook.com/docs/facebook-pixel/pixel-helper>
+
+## Instalación
+
+Hay que clonar el repositorio, instalar las dependencias con composer, generar el zip e instalarlo en Prestashop desde el gestor de módulos.
+O en vez de comprimir el zip, subir la carpeta pspixel a ./modules para que Prestashop lo detecte, buscarlo en el gestor de módulos e instalarlo.
+
+```bash
+git clone https://github.com/alejoasotelo/ps-mod-pspixel.git pspixel
+cd pspixel
+composer install --no-dev
+cd ..
+zip pspixel.zip pspixel
+```
