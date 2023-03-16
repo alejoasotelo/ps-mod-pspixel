@@ -45,7 +45,45 @@
 						{l s='Pixel ID' mod='pspixel'}
 					</label>
 					<div class="col-sm-6">
-						<input type="text" minlength="15" maxlength="16" class="form-control" id="PS_PIXEL_ID" name="PS_PIXEL_ID" placeholder="{l s='Your facebook pixel ID' mod='pspixel'}" value="{if isset($id_pixel) && !empty($id_pixel)}{$id_pixel|escape:'htmlall':'UTF-8'}{/if}" maxlength="16"/>
+						<input type="text" minlength="15" maxlength="16" class="form-control" id="PS_PIXEL_ID" name="PS_PIXEL_ID" placeholder="{l s='Your facebook pixel ID' mod='pspixel'}" value="{if isset($id_pixel) && !empty($id_pixel)}{$id_pixel|escape:'htmlall':'UTF-8'}{/if}"/>
+						<p class="help-block">&nbsp;</p>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+				<div class="form-group clear">
+					<label for="form-field-1" class="col-sm-4 control-label">
+						{l s='Access Token' mod='pspixel'}
+					</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="PS_PIXEL_ACCESS_TOKEN" name="PS_PIXEL_ACCESS_TOKEN" placeholder="{l s='Your facebook pixel access token' mod='pspixel'}" value="{if isset($access_token) && !empty($access_token)}{$access_token|escape:'htmlall':'UTF-8'}{/if}"/>
+						<p class="help-block">Es necesario para enviar el evento Purchase al crear pedidos mediante la API de conversión de Facebook.</p>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+				<div class="form-group clear">
+					<label for="form-field-1" class="col-sm-4 control-label">
+						{l s='Test enable' mod='pspixel'}
+					</label>
+					<div class="col-sm-6">
+
+						<span class="switch prestashop-switch fixed-width-lg">
+							<input type="radio" class="form-control" name="PS_PIXEL_TEST_ENABLE" id="PS_PIXEL_TEST_ENABLE_yes" value="1" {if $test_enable}checked{/if}/>
+							<label for="PS_PIXEL_TEST_ENABLE_yes">Sí</label>
+							<input type="radio" class="form-control" name="PS_PIXEL_TEST_ENABLE" id="PS_PIXEL_TEST_ENABLE_off" value="0" {if !$test_enable}checked{/if}/>
+							<label for="PS_PIXEL_TEST_ENABLE_off">No</label>
+							<a class="slide-button btn"></a>
+						</span>
+
+						<p class="help-block">&nbsp;</p>
+						<div class="clear">&nbsp;</div>
+					</div>
+				</div>
+				<div class="form-group clear">
+					<label for="form-field-1" class="col-sm-4 control-label">
+						{l s='Test Code' mod='pspixel'}
+					</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="PS_PIXEL_TEST_CODE" name="PS_PIXEL_TEST_CODE" placeholder="{l s='Your facebook pixel test code' mod='pspixel'}" value="{if isset($test_code) && !empty($test_code)}{$test_code|escape:'htmlall':'UTF-8'}{/if}"/>
 						<p class="help-block">&nbsp;</p>
 						<div class="clear">&nbsp;</div>
 					</div>

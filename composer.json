@@ -1,0 +1,13 @@
+{
+    "name": "alejoasotelo/pspixel",
+    "authors": [
+        {
+            "name": "alejoasotelo",
+            "email": "alesotelo@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "facebook/php-business-sdk": "^14.0"
+    }
+}
