@@ -37,27 +37,26 @@ $(document).ready(function () {
   }
 
   prestashop.on("updateCart", function (params) {
-    const hasParams =
-      typeof params !== "undefined" && typeof prestashop.cart !== "undefined";
+    const hasParams = typeof params !== "undefined" && typeof prestashop.cart !== "undefined";
 
     if (hasParams && params.reason.linkAction != "delete-from-cart") {
-      const iso_code = prestashop.currency.iso_code,
+        const iso_code = prestashop.currency.iso_code,
         products = prestashop.cart.products,
         my_id = params.reason.idProduct,
         my_attribute = params.reason.idProductAttribute;
 
-      const search_product = products.filter(function (e) {
-        return e.id_product == my_id && e.id_product_attribute == my_attribute;
-      });
-
-      if (search_product.length > 0) {
-        fbq("track", "AddToCart", {
-          value: search_product[0].price_wt,
-          currency: iso_code,
-          content_ids: my_id,
-          content_type: "product",
+        const search_product = products.filter(function (e) {
+            return e.id_product == my_id && e.id_product_attribute == my_attribute;
         });
-      }
+
+        if (search_product.length > 0) {
+            fbq("track", "AddToCart", {
+                value: search_product[0].price_wt,
+                currency: iso_code,
+                content_ids: my_id,
+                content_type: "product",
+            });
+        }
     }
   });
 });
