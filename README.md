@@ -1,4 +1,4 @@
-# Official PrestaShop Facebook Pixel module
+# Official PrestaShop Facebook Pixel module (PS 1.7)
 
 The Official Facebook Pixel module will help you to implement an analysis tool into your website pages and track different types of events that occur when your clients visit your website and take an action.
 
