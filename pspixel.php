@@ -18,7 +18,7 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author    PrestaShop SA <contact@prestashop.com>
+*  @author    PrestaShop SA <contact@prestashop.com> | Alejo Sotelo <alejosotelo.com.ar>
 *  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
@@ -35,7 +35,7 @@ class Pspixel extends Module
     public function __construct()
     {
         $this->name = 'pspixel';
-        $this->author = 'Prestashop';
+        $this->author = 'Prestashop | alejosotelo.com.ar';
         $this->tab = 'analytics_stats';
         $this->module_key = '73fdb778d4cf7afd3bbfe96dc57dc8c5';
         $this->version = '1.1.2';

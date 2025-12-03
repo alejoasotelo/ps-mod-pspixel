@@ -29,5 +29,7 @@
 		{l s='This module has been developped by PrestaShop and can only be sold through' mod='pspixel'} <a target="_blank" href="http://addons.prestashop.com">addons.prestashop.com</a>.<br /><br />
 
 		The PrestaShop Addons Team<br />
+		Modified by Alejo Sotelo <a href="https://alejosotelo.com.ar">alejosotelo.com.ar</a>.<br/>
 	</div>
+	<div>
 </div>
